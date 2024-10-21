@@ -1,0 +1,6 @@
+{
+	"jest.runMode": "on-demand",
+	"editor.codeActionsOnSave": {
+		"source.fixAll.eslint": "always"
+	},
+}
