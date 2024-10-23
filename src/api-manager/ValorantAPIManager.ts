@@ -12,17 +12,25 @@ import { requestValorantVersionFromThirdAPI } from '@/api-manager/ThirdAPIManage
 
 import type {
 	AccountXPResponse,
+	ActivateContractResponse,
 	CompetitiveUpdatesResponse,
+	CurrentGameLoadoutsResponse,
+	CurrentGameMatchResponse,
+	CurrentGamePlayerResponse,
 	CustomGameConfigsResponse,
 	FetchContentResponse,
+	ItemUpgradesResponse,
 	MatchDetailsResponse,
 	MatchHistoryResponse,
+	OwnedItemsResponse,
 	PartyChatTokenResponse,
 	PartyPlayerResponse,
 	PartyResponse,
 	PartyVoiceTokenResponse,
 	PlayerLoadoutResponse,
 	PlayerMMRResponse,
+	PregameLoadoutsResponse,
+	PregamePlayerResponse,
 	PricesResponse,
 	StorefrontResponse,
 	WalletResponse
@@ -43,9 +51,6 @@ class ValorantAPIManager {
 	private async requestRemotePD( shard: Shard, resource: string, init?: RequestInit ) {
 
 		const url = `https://pd.${ shard }.a.pvp.net/${ resource }`;
-
-		console.log( url );
-		console.log( init );
 
 		const result = await fetchRiot( url, init );
 
@@ -81,19 +86,24 @@ class ValorantAPIManager {
 
 		}
 
-		const valorantVersion = await requestValorantVersionFromThirdAPI();
-		if ( valorantVersion && valorantVersion.riotClientVersion ) {
+		const {
+			branch,
+			buildVersion,
+			changelist
+		} = await loadShooterGameLog();
 
-			this._ciServerVersion = valorantVersion.riotClientVersion;
+		if ( branch !== undefined && buildVersion !== undefined && changelist !== undefined ) {
+
+			this._ciServerVersion = [ branch, 'shipping', buildVersion, changelist ].join( '-' );
 
 			return;
 
 		}
 
-		const shoogerGameLog = await loadShooterGameLog();
-		if ( shoogerGameLog.ciServerVersion ) {
+		const valorantVersion = await requestValorantVersionFromThirdAPI();
+		if ( valorantVersion && valorantVersion.riotClientVersion ) {
 
-			this._ciServerVersion = shoogerGameLog.ciServerVersion;
+			this._ciServerVersion = valorantVersion.riotClientVersion;
 
 			return;
 
@@ -429,7 +439,7 @@ class ValorantAPIManager {
 			method: 'GET',
 		};
 
-		return this.requestRemotePD( shard, `store/v1/entitlements/${ uuid }/${ itemType }`, init ) as Promise<WalletResponse>;
+		return this.requestRemotePD( shard, `store/v1/entitlements/${ uuid }/${ itemType }`, init ) as Promise<OwnedItemsResponse>;
 
 	}
 
@@ -439,11 +449,109 @@ class ValorantAPIManager {
 	// ========================
 	// Pre-Game Endpoints Start
 
+	/**
+	 * [API Docs](https://valapidocs.techchrism.me/endpoint/pre-game-player)
+	 */
+	public async requestPreGamePlayer( region: Region, shard: Shard, uuid: string ) {
+
+		const headers = await this.getAuthClientHeader();
+		const init: RequestInit = {
+			headers,
+			method: 'GET',
+		};
+
+		return this.requestRemoteGLZ( region, shard, `pregame/v1/players/${ uuid }`, init ) as Promise<PregamePlayerResponse>;
+
+	}
+
+	/**
+	 * [API Docs](https://valapidocs.techchrism.me/endpoint/pre-game-match)
+	 */
+	public async requestPreGameMatch( region: Region, shard: Shard, preGameMatchId: string ) {
+
+		const headers = await this.getAuthClientHeader();
+		const init: RequestInit = {
+			headers,
+			method: 'GET',
+		};
+
+		return this.requestRemoteGLZ( region, shard, `pregame/v1/matches/${ preGameMatchId }`, init ) as Promise<PregamePlayerResponse>;
+
+	}
+
+	/**
+	 * [API Docs](https://valapidocs.techchrism.me/endpoint/pre-game-loadouts)
+	 */
+	public async requestPreGameLoadouts( region: Region, shard: Shard, preGameMatchId: string ) {
+
+		const headers = await this.getAuthClientHeader();
+		const init: RequestInit = {
+			headers,
+			method: 'GET',
+		};
+
+		return this.requestRemoteGLZ( region, shard, `pregame/v1/matches/${ preGameMatchId }/loadouts`, init ) as Promise<PregameLoadoutsResponse>;
+
+	}
+
+	// TODO: feat. [POST] Select Character
+
+	// TODO: feat. [POST] Lock Character
+
+	// TODO: feat. [POST] Pre-Game Quit
+
 	// Pre-Game Endpoints End
 	// ======================
 
 	// ============================
 	// Current Game Endpoints Start
+
+	/**
+	 * [API Docs](https://valapidocs.techchrism.me/endpoint/current-game-player)
+	 */
+	public async requestCurrentGamePlayer( region: Region, shard: Shard, uuid: string ) {
+
+		const headers = await this.getAuthClientHeader();
+		const init: RequestInit = {
+			headers,
+			method: 'GET',
+		};
+
+		return this.requestRemoteGLZ( region, shard, `core-game/v1/players/${ uuid }`, init ) as Promise<CurrentGamePlayerResponse>;
+
+	}
+
+	/**
+	 * [API Docs](https://valapidocs.techchrism.me/endpoint/current-game-match)
+	 */
+	public async requestCurrentGameMatch( region: Region, shard: Shard, currentGameMatchId: string ) {
+
+		const headers = await this.getAuthClientHeader();
+		const init: RequestInit = {
+			headers,
+			method: 'GET',
+		};
+
+		return this.requestRemoteGLZ( region, shard, `core-game/v1/matches/${ currentGameMatchId }`, init ) as Promise<CurrentGameMatchResponse>;
+
+	}
+
+	/**
+	 * [API Docs](https://valapidocs.techchrism.me/endpoint/current-game-loadouts)
+	 */
+	public async requestCurrentGameLoadouts( region: Region, shard: Shard, currentGameMatchId: string ) {
+
+		const headers = await this.getAuthClientHeader();
+		const init: RequestInit = {
+			headers,
+			method: 'GET',
+		};
+
+		return this.requestRemoteGLZ( region, shard, `core-game/v1/matches/${ currentGameMatchId }/loadouts`, init ) as Promise<CurrentGameLoadoutsResponse>;
+
+	}
+
+	// TODO: feat. [POST] Current Game Quit
 
 	// Current Game Endpoints End
 	// ==========================
@@ -451,20 +559,40 @@ class ValorantAPIManager {
 	// ========================
 	// Contract Endpoints Start
 
+	/**
+	 * [API Docs](https://valapidocs.techchrism.me/endpoint/item-upgrades)
+	 */
+	public async requesItemUpgrades( shard: Shard ) {
+
+		const headers = await this.getAuthClientHeader();
+		const init: RequestInit = {
+			headers,
+			method: 'GET',
+		};
+
+		return this.requestRemotePD( shard, `contract-definitions/v3/item-upgrades`, init ) as Promise<ItemUpgradesResponse>;
+
+	}
+
+	/**
+	 * [API Docs](https://valapidocs.techchrism.me/endpoint/contracts)
+	 */
+	public async requesItemContracts( shard: Shard, uuid: string ) {
+
+		const headers = await this.getAuthClientHeader();
+		const init: RequestInit = {
+			headers,
+			method: 'GET',
+		};
+
+		return this.requestRemotePD( shard, `contracts/v1/contracts/${ uuid }`, init ) as Promise<ActivateContractResponse>;
+
+	}
+
+	// TODO: feat. [POST] Activate Contract
+
 	// Contract Endpoints Start
 	// ========================
-
-	// =====================
-	// Local Endpoints Start
-
-	// Local Endpoints End
-	// ===================
-
-	// ============================
-	// Local Endpoints - Chat Start
-
-	// Local Endpoints - Chat End
-	// ==========================
 
 }
 

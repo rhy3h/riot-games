@@ -1,6 +1,11 @@
 import { beforeAll, describe, expect, test } from '@jest/globals';
 
 import {
+	CurrentGamePlayerResponse,
+	PregamePlayerResponse
+} from 'valorant-api-types';
+
+import {
 	LocalCredentialManager,
 	RiotAPIManager,
 	ValorantAPIManager,
@@ -295,6 +300,134 @@ describe( 'ValorantAPIManager', () => {
 			test( 'should return Titles', async () => {
 
 				const result = await valorantAPIManager.requestOwnedItems( 'ap', uuid, ITEM_TYPE_SKIN_TITLES );
+
+				expect( typeof result ).toBe( 'object' );
+
+			} );
+
+		} );
+
+	} );
+
+	describe( 'Pre-Game Endpoints', () => {
+
+		let preGamePlayer: PregamePlayerResponse;
+		let preGameMatchID: string;
+
+		beforeAll( async() => {
+
+			preGamePlayer = await valorantAPIManager.requestPreGamePlayer( 'ap', 'ap', uuid );
+			preGameMatchID = preGamePlayer.MatchID;
+
+		} );
+
+		describe( 'requestPreGamePlayer', () => {
+
+			test( 'should return Pre-Game Player', async () => {
+
+				const result = await valorantAPIManager.requestPreGamePlayer( 'ap', 'ap', uuid );
+
+				expect( typeof result ).toBe( 'object' );
+
+			} );
+
+		} );
+
+		describe( 'requestPreGameMatch', () => {
+
+			test( 'should return Pre-Game Match', async () => {
+
+				const result = await valorantAPIManager.requestPreGameMatch( 'ap', 'ap', preGameMatchID );
+
+				expect( typeof result ).toBe( 'object' );
+
+			} );
+
+		} );
+
+		describe( 'requestPreGameLoadouts', () => {
+
+			test( 'should return Pre-Game Loadouts', async () => {
+
+				const result = await valorantAPIManager.requestPreGameLoadouts( 'ap', 'ap', preGameMatchID );
+
+				expect( typeof result ).toBe( 'object' );
+
+			} );
+
+		} );
+
+	} );
+
+	describe( 'Current Game Endpoints', () => {
+
+		let currentGamePlayer: CurrentGamePlayerResponse;
+		let currentGameMatchId: string;
+
+		beforeAll( async() => {
+
+			currentGamePlayer = await valorantAPIManager.requestCurrentGamePlayer( 'ap', 'ap', uuid );
+			currentGameMatchId = currentGamePlayer.MatchID;
+
+		} );
+
+		describe( 'requestCurrentGamePlayer', () => {
+
+			test( 'should return Current Game Player', async () => {
+
+				const result = await valorantAPIManager.requestCurrentGamePlayer( 'ap', 'ap', uuid );
+
+				expect( typeof result ).toBe( 'object' );
+
+			} );
+
+		} );
+
+		describe( 'requestCurrentGameMatch', () => {
+
+			test( 'should return Current Game Match', async () => {
+
+				const result = await valorantAPIManager.requestCurrentGameMatch( 'ap', 'ap', currentGameMatchId );
+
+				expect( typeof result ).toBe( 'object' );
+
+			} );
+
+		} );
+
+		describe( 'requestCurrentGameLoadouts', () => {
+
+			test( 'should return Current Game Match', async () => {
+
+				const result = await valorantAPIManager.requestCurrentGameLoadouts( 'ap', 'ap', currentGameMatchId );
+
+				expect( typeof result ).toBe( 'object' );
+
+			} );
+
+		} );
+
+	} );
+
+	describe( 'Contract Endpoints', () => {
+
+		describe( 'requesItemUpgrades', () => {
+
+			test( 'should return Item Upgrades', async () => {
+
+				const result = await valorantAPIManager.requesItemUpgrades( 'ap' );
+
+				expect( typeof result ).toBe( 'object' );
+
+			} );
+
+		} );
+
+		describe( 'requesItemContracts', () => {
+
+			test( 'should return Item Contracts', async () => {
+
+				const result = await valorantAPIManager.requesItemContracts( 'ap', uuid );
 
 				expect( typeof result ).toBe( 'object' );
 

@@ -9,7 +9,9 @@ interface Lockfile {
 }
 
 interface ShooterGameLog {
-	ciServerVersion: string;
+	branch: string;
+	buildVersion: number;
+	changelist: number;
 }
 
 interface ValorantJWTPayload {
