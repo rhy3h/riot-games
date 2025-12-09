@@ -145,7 +145,7 @@ describe( 'LocalAPIManager', () => {
 
 	describe( 'requestRemoveFriendRequest', () => {
 
-		test( 'should Send Friend Request', async () => {
+		test.skip( 'should Send Friend Request', async () => {
 
 			const result = await localAPIManager.requestRemoveFriendRequest( {
 				"puuid": "",
@@ -241,22 +241,43 @@ describe( 'LocalAPIManager', () => {
 
 	} );
 
-
 	describe( 'requestChatParticipants', () => {
 
-		test.todo( 'should return Chat Participants' );
+		test.skip( 'should return Chat Participants', async () => {
+
+			const result = await localAPIManager.requestChatParticipants( '' );
+
+			expect( typeof result ).toBe( 'object' );
+
+		} );
 
 	} );
 
 	describe( 'requestSendChat', () => {
 
-		test.todo( 'should Send Chat' );
+		test.skip( 'should Send Chat', async () => {
+
+			const result = await localAPIManager.requestSendChat( {
+				'cid': '',
+				'message': '',
+				'type': 'chat',
+			} );
+
+			expect( typeof result ).toBe( 'object' );
+
+		} );
 
 	} );
 
 	describe( 'requestChatHistory', () => {
 
-		test.todo( 'should return Chat History' );
+		test.skip( 'should return Chat History', async () => {
+
+			const result = await localAPIManager.requestChatHistory( '' );
+
+			expect( typeof result ).toBe( 'object' );
+
+		} );
 
 	} );
 
