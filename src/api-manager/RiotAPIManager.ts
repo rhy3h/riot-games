@@ -16,7 +16,6 @@ class RiotAPIManager {
 
 		this._credentialManager = credentialManager;
 
-
 	}
 
 	/**
