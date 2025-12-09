@@ -1,10 +1,10 @@
 import type { RequestInit } from 'node-fetch';
 
-import { fetchRiot } from '@/fetch-riot';
-
 import { CLIENT_PLATFORM } from '@/constants';
 
 import { Shard, Region, ItemType } from '@/api-manager/ValorantAPIType';
+
+import { APIManager } from '@/api-manager/APIManager';
 
 import { LocalAPIManager } from '@/api-manager/LocalAPIManager';
 import { LocalCredentialManager } from '@/credential-manager/LocalCredentialManager';
@@ -36,7 +36,7 @@ import type {
 	WalletResponse
 } from 'valorant-api-types';
 
-class ValorantAPIManager {
+class ValorantAPIManager extends APIManager {
 
 	private readonly _credentialManager: LocalCredentialManager;
 
@@ -44,35 +44,37 @@ class ValorantAPIManager {
 
 	constructor( credentialManager: LocalCredentialManager ) {
 
+		super();
+
 		this._credentialManager = credentialManager;
 
 	}
 
-	private async requestRemotePD( shard: Shard, resource: string, init?: RequestInit ) {
+	private async requestRemotePD( shard: Shard, resource: string, init: RequestInit ) {
 
 		const url = `https://pd.${ shard }.a.pvp.net/${ resource }`;
 
-		const result = await fetchRiot( url, init );
+		const result = await this.fetch( url, init );
 
 		return result;
 
 	}
 
-	private async requestRemoteShared( shard: Shard, resource: string, init?: RequestInit ) {
+	private async requestRemoteShared( shard: Shard, resource: string, init: RequestInit ) {
 
 		const url = `https://shared.${ shard }.a.pvp.net/${ resource }`;
 
-		const result = await fetchRiot( url, init );
+		const result = await this.fetch( url, init );
 
 		return result;
 
 	}
 
-	private async requestRemoteGLZ( region: Region, shard: Shard, resource: string, init?: RequestInit ) {
+	private async requestRemoteGLZ( region: Region, shard: Shard, resource: string, init: RequestInit ) {
 
 		const url = `https://glz-${ region }-1.${ shard }.a.pvp.net/${ resource }`;
 
-		const result = await fetchRiot( url, init );
+		const result = await this.fetch( url, init );
 
 		return result;
 

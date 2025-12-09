@@ -1,6 +1,6 @@
 import type { RequestInit } from 'node-fetch';
 
-import { fetchRiot } from '@/fetch-riot';
+import { APIManager } from '@/api-manager/APIManager';
 
 import { LocalCredentialManager } from '@/credential-manager/LocalCredentialManager';
 
@@ -8,11 +8,13 @@ import type {
 	PlayerInfoResponse
 } from 'valorant-api-types';
 
-class RiotAPIManager {
+class RiotAPIManager extends APIManager {
 
 	private readonly _credentialManager: LocalCredentialManager;
 
 	constructor( credentialManager: LocalCredentialManager ) {
+
+		super();
 
 		this._credentialManager = credentialManager;
 
@@ -31,7 +33,7 @@ class RiotAPIManager {
 			headers
 		};
 
-		return fetchRiot( url, init ) as Promise<PlayerInfoResponse>;
+		return this.fetch( url, init ) as Promise<PlayerInfoResponse>;
 
 	}
 
