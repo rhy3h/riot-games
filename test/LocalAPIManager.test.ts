@@ -1,27 +1,18 @@
 import { describe, expect, test } from '@jest/globals';
 
 import {
-	loadLockfile,
-	loadShooterGameLog,
-	requestAccountAlias,
-	requestChatSession,
-	requestClientRegion,
-	requestEntitlementsToken,
-	requestExternalSessions,
-	requestFriends,
-	requestLocalHelp,
-	requestLocalSwaggerDocs,
-	requestPresence,
-	requestRSOUserInfo
+	LocalAPIManager
 } from '@/index';
 
 describe( 'LocalAPIManager', () => {
+
+	const localAPIManager = new LocalAPIManager();
 
 	describe( 'loadLockfile', () => {
 
 		test( 'should return Lockfile', async () => {
 
-			const result = await loadLockfile();
+			const result = await localAPIManager.loadLockfile();
 
 			expect( typeof result ).toBe( 'object' );
 
@@ -33,7 +24,7 @@ describe( 'LocalAPIManager', () => {
 
 		test( 'should return ShooterGame Log', async () => {
 
-			const result = await loadShooterGameLog();
+			const result = await localAPIManager.loadShooterGameLog();
 
 			expect( typeof result ).toBe( 'object' );
 
@@ -45,7 +36,7 @@ describe( 'LocalAPIManager', () => {
 
 		test( 'should return Local Help', async () => {
 
-			const result = await requestLocalHelp();
+			const result = await localAPIManager.requestLocalHelp();
 
 			expect( typeof result ).toBe( 'object' );
 
@@ -57,7 +48,7 @@ describe( 'LocalAPIManager', () => {
 
 		test( 'should return External Sessions', async () => {
 
-			const result = await requestExternalSessions();
+			const result = await localAPIManager.requestExternalSessions();
 
 			expect( typeof result ).toBe( 'object' );
 
@@ -69,7 +60,7 @@ describe( 'LocalAPIManager', () => {
 
 		test( 'should return RSO User Info', async () => {
 
-			const result = await requestRSOUserInfo();
+			const result = await localAPIManager.requestRSOUserInfo();
 
 			expect( typeof result ).toBe( 'object' );
 
@@ -81,7 +72,7 @@ describe( 'LocalAPIManager', () => {
 
 		test( 'should return Client Region', async () => {
 
-			const result = await requestClientRegion();
+			const result = await localAPIManager.requestClientRegion();
 
 			expect( typeof result ).toBe( 'object' );
 
@@ -93,7 +84,7 @@ describe( 'LocalAPIManager', () => {
 
 		test( 'should return Account Alias', async () => {
 
-			const result = await requestAccountAlias();
+			const result = await localAPIManager.requestAccountAlias();
 
 			expect( typeof result ).toBe( 'object' );
 
@@ -105,7 +96,7 @@ describe( 'LocalAPIManager', () => {
 
 		test( 'should return Entitlements & Token', async () => {
 
-			const result = await requestEntitlementsToken();
+			const result = await localAPIManager.requestEntitlementsToken();
 
 			expect( typeof result ).toBe( 'object' );
 
@@ -117,7 +108,7 @@ describe( 'LocalAPIManager', () => {
 
 		test( 'should return Chat Session', async () => {
 
-			const result = await requestChatSession();
+			const result = await localAPIManager.requestChatSession();
 
 			expect( typeof result ).toBe( 'object' );
 
@@ -129,7 +120,7 @@ describe( 'LocalAPIManager', () => {
 
 		test( 'should return Friends', async () => {
 
-			const result = await requestFriends();
+			const result = await localAPIManager.requestFriends();
 
 			expect( typeof result ).toBe( 'object' );
 
@@ -141,7 +132,7 @@ describe( 'LocalAPIManager', () => {
 
 		test( 'should return Presence', async () => {
 
-			const result = await requestPresence();
+			const result = await localAPIManager.requestPresence();
 
 			expect( typeof result ).toBe( 'object' );
 
@@ -153,7 +144,7 @@ describe( 'LocalAPIManager', () => {
 
 		test( 'should return Local Swagger Docs', async () => {
 
-			const result = await requestLocalSwaggerDocs();
+			const result = await localAPIManager.requestLocalSwaggerDocs();
 
 			expect( typeof result ).toBe( 'object' );
 

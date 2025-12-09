@@ -6,7 +6,7 @@ import { CLIENT_PLATFORM } from '@/constants';
 
 import { Shard, Region, ItemType } from '@/api-manager/ValorantAPIType';
 
-import { loadShooterGameLog } from '@/api-manager/LocalAPIManager';
+import { LocalAPIManager } from '@/api-manager/LocalAPIManager';
 import { LocalCredentialManager } from '@/credential-manager/LocalCredentialManager';
 import { requestValorantVersionFromThirdAPI } from '@/api-manager/ThirdAPIManager';
 
@@ -90,7 +90,7 @@ class ValorantAPIManager {
 			branch,
 			buildVersion,
 			changelist
-		} = await loadShooterGameLog();
+		} = await new LocalAPIManager().loadShooterGameLog();
 
 		if ( branch !== undefined && buildVersion !== undefined && changelist !== undefined ) {
 

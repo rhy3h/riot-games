@@ -1,4 +1,6 @@
-export * from '@/api-manager/LocalAPIManager';
+export {
+	LocalAPIManager
+} from '@/api-manager/LocalAPIManager';
 
 export {
 	LocalCredentialManager

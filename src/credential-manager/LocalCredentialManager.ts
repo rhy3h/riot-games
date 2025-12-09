@@ -1,4 +1,4 @@
-import { requestEntitlementsToken } from '@/api-manager/LocalAPIManager';
+import { LocalAPIManager } from '@/api-manager/LocalAPIManager';
 
 const expirationDiff = 60 * 1000;
 
@@ -37,7 +37,7 @@ export class LocalCredentialManager {
 
 	private async _requestCredentials(): Promise<void> {
 
-		const data = await requestEntitlementsToken();
+		const data = await new LocalAPIManager().requestEntitlementsToken();
 
 		this._token = data.accessToken;
 		this._entitlement = data.token;
