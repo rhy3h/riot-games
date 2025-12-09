@@ -152,4 +152,71 @@ describe( 'LocalAPIManager', () => {
 
 	} );
 
+	describe( 'requestPartyChatInfo', () => {
+
+		test( 'should return Party Chat Info', async () => {
+
+			const result = await localAPIManager.requestPartyChatInfo();
+
+			expect( typeof result ).toBe( 'object' );
+
+		} );
+
+	} );
+
+	describe( 'requestPrePartyChatInfo', () => {
+
+		test( 'should return Pre Party Chat Info', async () => {
+
+			const result = await localAPIManager.requestPrePartyChatInfo();
+
+			expect( typeof result ).toBe( 'object' );
+
+		} );
+
+	} );
+
+	describe( 'requestCurrentGameChatInfo', () => {
+
+		test( 'should return Current Game Chat Info', async () => {
+
+			const result = await localAPIManager.requestCurrentGameChatInfo();
+
+			expect( typeof result ).toBe( 'object' );
+
+		} );
+
+	} );
+
+	describe( 'requestAllChatInfo', () => {
+
+		test( 'should return All Chat Info', async () => {
+
+			const result = await localAPIManager.requestAllChatInfo();
+
+			expect( typeof result ).toBe( 'object' );
+
+		} );
+
+	} );
+
+
+	describe( 'requestChatParticipants', () => {
+
+		test.todo( 'should return Chat Participants' );
+
+	} );
+
+	describe( 'requestSendChat', () => {
+
+		test.todo( 'should Send Chat' );
+
+	} );
+
+	describe( 'requestChatHistory', () => {
+
+		test.todo( 'should return Chat History' );
+
+	} );
+
 } );

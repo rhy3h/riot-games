@@ -42,3 +42,5 @@ interface ValorantVersion {
 	riotClientBuild: string;
 	buildDate: string;
 }
+
+type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';

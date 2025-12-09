@@ -1,21 +1,30 @@
 import path from 'node:path';
 import https from 'node:https';
 import fs from 'node:fs';
-import type { RequestInit } from 'node-fetch';
+import type { RequestInit, BodyInit } from 'node-fetch';
+
+import { z } from 'zod';
 
 import { fetchRiot } from '@/fetch-riot';
 
 import type {
 	AccountAliasResponse,
+	AllChatInfoResponse,
+	ChatHistoryResponse,
+	ChatParticipantsResponse,
 	ChatSessionResponse,
 	ClientRegionResponse,
+	CurrentGameChatInfoResponse,
 	EntitlementsTokenResponse,
 	FriendRequestsResponse,
 	FriendsResponse,
 	LocalHelpResponse,
+	PartyChatInfoResponse,
 	PresenceResponse,
 	RSOUserInfoResponse,
-	SessionsResponse
+	SendChatResponse,
+	SessionsResponse,
+	sendChatEndpoint,
 } from 'valorant-api-types';
 
 const LOCAL_AGENT = new https.Agent( {
@@ -101,7 +110,7 @@ class LocalAPIManager {
 
 	}
 
-	async requestLocal( resource: string ) {
+	async requestLocal( resource: string, method: HttpMethod, body?: BodyInit ) {
 
 		const { port, protocol, basic } = await this.loadLockfile();
 
@@ -112,9 +121,29 @@ class LocalAPIManager {
 		const init: RequestInit = {
 			headers: headers,
 			agent: LOCAL_AGENT,
+			method: method,
+			body: body,
 		};
 
 		return fetchRiot( url, init );
+
+	}
+
+	async get( resource: string ) {
+
+		return this.requestLocal( resource, 'GET' );
+
+	}
+
+	async post( resource: string, body: any ) {
+
+		if ( typeof ( body ) !== 'string' ) {
+
+			body = JSON.stringify( body );
+
+		}
+
+		return this.requestLocal( resource, 'POST', body );
 
 	}
 
@@ -126,7 +155,7 @@ class LocalAPIManager {
 	 */
 	async requestLocalHelp() {
 
-		return this.requestLocal( 'help' ) as Promise<LocalHelpResponse>;
+		return this.get( 'help' ) as Promise<LocalHelpResponse>;
 
 	}
 
@@ -135,7 +164,7 @@ class LocalAPIManager {
 	 */
 	async requestExternalSessions() {
 
-		return this.requestLocal( 'product-session/v1/external-sessions' ) as Promise<SessionsResponse>;
+		return this.get( 'product-session/v1/external-sessions' ) as Promise<SessionsResponse>;
 
 	}
 
@@ -144,7 +173,7 @@ class LocalAPIManager {
 	 */
 	async requestRSOUserInfo() {
 
-		return this.requestLocal( 'rso-auth/v1/authorization/userinfo' ) as Promise<RSOUserInfoResponse>;
+		return this.get( 'rso-auth/v1/authorization/userinfo' ) as Promise<RSOUserInfoResponse>;
 
 	}
 
@@ -153,7 +182,7 @@ class LocalAPIManager {
 	 */
 	async requestClientRegion() {
 
-		return this.requestLocal( 'riotclient/region-locale' ) as Promise<ClientRegionResponse>;
+		return this.get( 'riotclient/region-locale' ) as Promise<ClientRegionResponse>;
 
 	}
 
@@ -162,7 +191,7 @@ class LocalAPIManager {
 	 */
 	async requestAccountAlias() {
 
-		return this.requestLocal( 'player-account/aliases/v1/active' ) as Promise<AccountAliasResponse>;
+		return this.get( 'player-account/aliases/v1/active' ) as Promise<AccountAliasResponse>;
 
 	}
 
@@ -171,7 +200,7 @@ class LocalAPIManager {
 	 */
 	async requestEntitlementsToken() {
 
-		return this.requestLocal( 'entitlements/v1/token' ) as Promise<EntitlementsTokenResponse>;
+		return this.get( 'entitlements/v1/token' ) as Promise<EntitlementsTokenResponse>;
 
 	}
 
@@ -180,7 +209,7 @@ class LocalAPIManager {
 	 */
 	async requestChatSession() {
 
-		return this.requestLocal( 'chat/v1/session' ) as Promise<ChatSessionResponse>;
+		return this.get( 'chat/v1/session' ) as Promise<ChatSessionResponse>;
 
 	}
 
@@ -189,7 +218,7 @@ class LocalAPIManager {
 	 */
 	async requestFriends() {
 
-		return this.requestLocal( 'chat/v4/friends' ) as Promise<FriendsResponse>;
+		return this.get( 'chat/v4/friends' ) as Promise<FriendsResponse>;
 
 	}
 
@@ -202,7 +231,7 @@ class LocalAPIManager {
 	 */
 	async requestPresence() {
 
-		return this.requestLocal( 'chat/v4/presences' ) as Promise<PresenceResponse>;
+		return this.get( 'chat/v4/presences' ) as Promise<PresenceResponse>;
 
 	}
 
@@ -211,7 +240,7 @@ class LocalAPIManager {
 	 */
 	async requestFriendRequests() {
 
-		return this.requestLocal( 'chat/v4/friendrequests' ) as Promise<FriendRequestsResponse>;
+		return this.get( 'chat/v4/friendrequests' ) as Promise<FriendRequestsResponse>;
 
 	}
 
@@ -220,7 +249,7 @@ class LocalAPIManager {
 	 */
 	async requestLocalSwaggerDocs() {
 
-		return this.requestLocal( 'swagger/v3/openapi.json' ) as Promise<unknown>;
+		return this.get( 'swagger/v3/openapi.json' ) as Promise<unknown>;
 
 	}
 
@@ -232,19 +261,68 @@ class LocalAPIManager {
 	// ============================
 	// Local Endpoints - Chat Start
 
-	// TODO: feat. [GET] Party Chat Info
+	/**
+	 * [API Docs](https://valapidocs.techchrism.me/endpoint/party-chat-info)
+	 */
+	async requestPartyChatInfo() {
 
-	// TODO: feat. [GET] Pre-Game Chat Info
+		return this.get( 'chat/v6/conversations/ares-parties' ) as Promise<PartyChatInfoResponse>;
 
-	// TODO: feat. [GET] Current Game Chat Info
+	}
 
-	// TODO: feat. [GET] All Chat Info
+	/**
+	 * [API Docs](https://valapidocs.techchrism.me/endpoint/pre-game-chat-info)
+	 */
+	async requestPrePartyChatInfo() {
 
-	// TODO: feat. [GET] Chat Participants
+		return this.get( 'chat/v6/conversations/ares-pregame' ) as Promise<PartyChatInfoResponse>;
 
-	// TODO: feat. [POST] Send Chat
+	}
 
-	// TODO: feat. [GET] Chat History
+	/**
+	 * [API Docs](https://valapidocs.techchrism.me/endpoint/current-game-chat-info)
+	 */
+	async requestCurrentGameChatInfo() {
+
+		return this.get( 'chat/v6/conversations/ares-coregame' ) as Promise<CurrentGameChatInfoResponse>;
+
+	}
+
+	/**
+	 * [API Docs](https://valapidocs.techchrism.me/endpoint/all-chat-info-info)
+	 */
+	async requestAllChatInfo() {
+
+		return this.get( 'chat/v6/conversations' ) as Promise<AllChatInfoResponse>;
+
+	}
+
+	/**
+	 * [API Docs](https://valapidocs.techchrism.me/endpoint/chat-participants)
+	 */
+	async requestChatParticipants( cid: string ) {
+
+		return this.get( `chat/v5/participants?cid=${cid}` ) as Promise<ChatParticipantsResponse>;
+
+	}
+
+	/**
+	 * [API Docs](https://valapidocs.techchrism.me/endpoint/send-chat)
+	 */
+	async requestSendChat( body: z.input<typeof sendChatEndpoint.body> ) {
+
+		return this.post( 'chat/v6/messages', body ) as Promise<SendChatResponse>;
+
+	}
+
+	/**
+	 * [API Docs](https://valapidocs.techchrism.me/endpoint/chat-history)
+	 */
+	async requestChatHistory( cid: string ) {
+
+		return this.get( `chat/v6/messages?cid=${cid}` ) as Promise<ChatHistoryResponse>;
+
+	}
 
 	// Local Endpoints - Chat End
 	// ==========================
