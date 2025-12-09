@@ -9,6 +9,10 @@ export async function fetchRiot( url: string, init?: RequestInit ) {
 
 				return response.json();
 
+			} else if ( response.status === 204 ) {
+
+				return "";
+
 			} else {
 
 				throw Error( 'Response ' + response.status + ': ' + response.statusText );

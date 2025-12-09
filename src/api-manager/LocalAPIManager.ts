@@ -22,9 +22,13 @@ import type {
 	PartyChatInfoResponse,
 	PresenceResponse,
 	RSOUserInfoResponse,
+	RemoveFriendRequestResponse,
 	SendChatResponse,
+	SendFriendRequestResponse,
 	SessionsResponse,
+	removeFriendRequestEndpoint,
 	sendChatEndpoint,
+	sendFriendRequestEndpoint,
 } from 'valorant-api-types';
 
 const LOCAL_AGENT = new https.Agent( {
@@ -116,7 +120,8 @@ class LocalAPIManager {
 
 		const url = `${ protocol }://127.0.0.1:${ port }/${ resource }`;
 		const headers = {
-			'Authorization': `Basic ${basic}`
+			'Authorization': `Basic ${basic}`,
+			'Content-Type': 'application/json'
 		};
 		const init: RequestInit = {
 			headers: headers,
@@ -144,6 +149,18 @@ class LocalAPIManager {
 		}
 
 		return this.requestLocal( resource, 'POST', body );
+
+	}
+
+	async delete( resource: string, body: any ) {
+
+		if ( typeof ( body ) !== 'string' ) {
+
+			body = JSON.stringify( body );
+
+		}
+
+		return this.requestLocal( resource, 'DELETE', body );
 
 	}
 
@@ -222,9 +239,23 @@ class LocalAPIManager {
 
 	}
 
-	// TODO: feat. [POST] Send Friend Request
+	/**
+	 * [API Docs](https://valapidocs.techchrism.me/endpoint/send-friend-request)
+	 */
+	async requestSendFriendRequest( body: z.input<typeof sendFriendRequestEndpoint.body> ) {
 
-	// TODO: feat. [DELETE] Remove Friend Request
+		return this.post( 'chat/v4/friendrequests', body ) as Promise<SendFriendRequestResponse>;
+
+	}
+
+	/**
+	 * [API Docs](https://valapidocs.techchrism.me/endpoint/send-friend-request)
+	 */
+	async requestRemoveFriendRequest( body: z.input<typeof removeFriendRequestEndpoint.body> ) {
+
+		return this.delete( 'chat/v4/friendrequests', body ) as Promise<RemoveFriendRequestResponse>;
+
+	}
 
 	/**
 	 * [API Docs](https://valapidocs.techchrism.me/endpoint/presence)

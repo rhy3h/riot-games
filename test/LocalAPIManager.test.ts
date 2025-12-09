@@ -128,11 +128,52 @@ describe( 'LocalAPIManager', () => {
 
 	} );
 
+	describe( 'requestSendFriendRequest', () => {
+
+		test.skip( 'should Send Friend Request', async () => {
+
+			const result = await localAPIManager.requestSendFriendRequest( {
+				"game_name": "",
+				"game_tag": ""
+			} );
+
+			expect( typeof result ).toBe( 'object' );
+
+		} );
+
+	} );
+
+	describe( 'requestRemoveFriendRequest', () => {
+
+		test( 'should Send Friend Request', async () => {
+
+			const result = await localAPIManager.requestRemoveFriendRequest( {
+				"puuid": "",
+			} );
+
+			expect( result ).toBe( '' );
+
+		} );
+
+	} );
+
 	describe( 'requestPresence', () => {
 
 		test( 'should return Presence', async () => {
 
 			const result = await localAPIManager.requestPresence();
+
+			expect( typeof result ).toBe( 'object' );
+
+		} );
+
+	} );
+
+	describe( 'requestFriendRequests', () => {
+
+		test( 'should return Friend Requests', async () => {
+
+			const result = await localAPIManager.requestFriendRequests();
 
 			expect( typeof result ).toBe( 'object' );
 
