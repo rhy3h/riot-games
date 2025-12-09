@@ -50,31 +50,31 @@ class ValorantAPIManager extends APIManager {
 
 	}
 
-	private async requestRemotePD( shard: Shard, resource: string, init: RequestInit ) {
+	private async requestRemotePD<T>( shard: Shard, resource: string, init: RequestInit ) {
 
 		const url = `https://pd.${ shard }.a.pvp.net/${ resource }`;
 
-		const result = await this.fetch( url, init );
+		const result = await this.fetchRiot<T>( url, init );
 
 		return result;
 
 	}
 
-	private async requestRemoteShared( shard: Shard, resource: string, init: RequestInit ) {
+	private async requestRemoteShared<T>( shard: Shard, resource: string, init: RequestInit ) {
 
 		const url = `https://shared.${ shard }.a.pvp.net/${ resource }`;
 
-		const result = await this.fetch( url, init );
+		const result = await this.fetchRiot<T>( url, init );
 
 		return result;
 
 	}
 
-	private async requestRemoteGLZ( region: Region, shard: Shard, resource: string, init: RequestInit ) {
+	private async requestRemoteGLZ<T>( region: Region, shard: Shard, resource: string, init: RequestInit ) {
 
 		const url = `https://glz-${ region }-1.${ shard }.a.pvp.net/${ resource }`;
 
-		const result = await this.fetch( url, init );
+		const result = await this.fetchRiot<T>( url, init );
 
 		return result;
 
@@ -158,7 +158,7 @@ class ValorantAPIManager extends APIManager {
 			method: 'GET',
 		};
 
-		return this.requestRemoteShared( shard, `content-service/v3/content`, init ) as Promise<FetchContentResponse>;
+		return this.requestRemoteShared<FetchContentResponse>( shard, `content-service/v3/content`, init );
 
 	}
 
@@ -173,7 +173,7 @@ class ValorantAPIManager extends APIManager {
 			method: 'GET',
 		};
 
-		return this.requestRemotePD( shard, `account-xp/v1/players/${ uuid }`, init ) as Promise<AccountXPResponse>;
+		return this.requestRemotePD<AccountXPResponse>( shard, `account-xp/v1/players/${ uuid }`, init );
 
 	}
 
@@ -188,7 +188,7 @@ class ValorantAPIManager extends APIManager {
 			method: 'GET',
 		};
 
-		return this.requestRemotePD( shard, `personalization/v2/players/${ uuid }/playerloadout`, init ) as Promise<PlayerLoadoutResponse>;
+		return this.requestRemotePD<PlayerLoadoutResponse>( shard, `personalization/v2/players/${ uuid }/playerloadout`, init );
 
 	}
 
@@ -208,7 +208,7 @@ class ValorantAPIManager extends APIManager {
 			method: 'GET',
 		};
 
-		return this.requestRemotePD( shard, `mmr/v1/players/${ uuid }`, init ) as Promise<PlayerMMRResponse>;
+		return this.requestRemotePD<PlayerMMRResponse>( shard, `mmr/v1/players/${ uuid }`, init );
 
 	}
 
@@ -225,7 +225,7 @@ class ValorantAPIManager extends APIManager {
 
 		// TODO: feat. Support query params
 
-		return this.requestRemotePD( shard, `match-history/v1/history/${ uuid }`, init ) as Promise<MatchHistoryResponse>;
+		return this.requestRemotePD<MatchHistoryResponse>( shard, `match-history/v1/history/${ uuid }`, init );
 
 	}
 
@@ -240,7 +240,7 @@ class ValorantAPIManager extends APIManager {
 			method: 'GET',
 		};
 
-		return this.requestRemotePD( shard, `match-details/v1/matches/${ matchID }`, init ) as Promise<MatchDetailsResponse>;
+		return this.requestRemotePD<MatchDetailsResponse>( shard, `match-details/v1/matches/${ matchID }`, init );
 
 	}
 
@@ -257,7 +257,7 @@ class ValorantAPIManager extends APIManager {
 
 		// TODO: feat. Support query params
 
-		return this.requestRemotePD( shard, `mmr/v1/players/${ uuid }/competitiveupdates`, init ) as Promise<CompetitiveUpdatesResponse>;
+		return this.requestRemotePD<CompetitiveUpdatesResponse>( shard, `mmr/v1/players/${ uuid }/competitiveupdates`, init );
 
 	}
 
@@ -286,7 +286,7 @@ class ValorantAPIManager extends APIManager {
 			method: 'GET',
 		};
 
-		return this.requestRemoteGLZ( region, shard, `parties/v1/parties/${ partyId }`, init ) as Promise<PartyResponse>;
+		return this.requestRemoteGLZ<PartyResponse>( region, shard, `parties/v1/parties/${ partyId }`, init );
 
 	}
 
@@ -301,7 +301,7 @@ class ValorantAPIManager extends APIManager {
 			method: 'GET',
 		};
 
-		return this.requestRemoteGLZ( region, shard, `parties/v1/players/${ uuid }`, init ) as Promise<PartyPlayerResponse>;
+		return this.requestRemoteGLZ<PartyPlayerResponse>( region, shard, `parties/v1/players/${ uuid }`, init );
 
 	}
 
@@ -338,7 +338,7 @@ class ValorantAPIManager extends APIManager {
 			method: 'GET',
 		};
 
-		return this.requestRemoteGLZ( region, shard, `parties/v1/parties/customgameconfigs`, init ) as Promise<CustomGameConfigsResponse>;
+		return this.requestRemoteGLZ<CustomGameConfigsResponse>( region, shard, `parties/v1/parties/customgameconfigs`, init );
 
 	}
 
@@ -353,7 +353,7 @@ class ValorantAPIManager extends APIManager {
 			method: 'GET',
 		};
 
-		return this.requestRemoteGLZ( region, shard, `parties/v1/parties/${ partyId }/muctoken`, init ) as Promise<PartyChatTokenResponse>;
+		return this.requestRemoteGLZ<PartyChatTokenResponse>( region, shard, `parties/v1/parties/${ partyId }/muctoken`, init );
 
 	}
 
@@ -368,7 +368,7 @@ class ValorantAPIManager extends APIManager {
 			method: 'GET',
 		};
 
-		return this.requestRemoteGLZ( region, shard, `parties/v1/parties/${ partyId }/voicetoken`, init ) as Promise<PartyVoiceTokenResponse>;
+		return this.requestRemoteGLZ<PartyVoiceTokenResponse>( region, shard, `parties/v1/parties/${ partyId }/voicetoken`, init );
 
 	}
 
@@ -395,7 +395,7 @@ class ValorantAPIManager extends APIManager {
 			method: 'GET',
 		};
 
-		return this.requestRemotePD( shard, `store/v1/offers`, init ) as Promise<PricesResponse>;
+		return this.requestRemotePD<PricesResponse>( shard, `store/v1/offers`, init );
 
 	}
 
@@ -411,7 +411,7 @@ class ValorantAPIManager extends APIManager {
 			method: 'GET',
 		};
 
-		return this.requestRemotePD( shard, `store/v2/storefront/${ uuid }`, init ) as Promise<StorefrontResponse>;
+		return this.requestRemotePD<StorefrontResponse>( shard, `store/v2/storefront/${ uuid }`, init );
 
 	}
 
@@ -426,7 +426,7 @@ class ValorantAPIManager extends APIManager {
 			method: 'GET',
 		};
 
-		return this.requestRemotePD( shard, `store/v1/wallet/${ uuid }`, init ) as Promise<WalletResponse>;
+		return this.requestRemotePD<WalletResponse>( shard, `store/v1/wallet/${ uuid }`, init );
 
 	}
 
@@ -441,7 +441,7 @@ class ValorantAPIManager extends APIManager {
 			method: 'GET',
 		};
 
-		return this.requestRemotePD( shard, `store/v1/entitlements/${ uuid }/${ itemType }`, init ) as Promise<OwnedItemsResponse>;
+		return this.requestRemotePD<OwnedItemsResponse>( shard, `store/v1/entitlements/${ uuid }/${ itemType }`, init );
 
 	}
 
@@ -462,7 +462,7 @@ class ValorantAPIManager extends APIManager {
 			method: 'GET',
 		};
 
-		return this.requestRemoteGLZ( region, shard, `pregame/v1/players/${ uuid }`, init ) as Promise<PregamePlayerResponse>;
+		return this.requestRemoteGLZ<PregamePlayerResponse>( region, shard, `pregame/v1/players/${ uuid }`, init );
 
 	}
 
@@ -477,7 +477,7 @@ class ValorantAPIManager extends APIManager {
 			method: 'GET',
 		};
 
-		return this.requestRemoteGLZ( region, shard, `pregame/v1/matches/${ preGameMatchId }`, init ) as Promise<PregamePlayerResponse>;
+		return this.requestRemoteGLZ<PregamePlayerResponse>( region, shard, `pregame/v1/matches/${ preGameMatchId }`, init );
 
 	}
 
@@ -492,7 +492,7 @@ class ValorantAPIManager extends APIManager {
 			method: 'GET',
 		};
 
-		return this.requestRemoteGLZ( region, shard, `pregame/v1/matches/${ preGameMatchId }/loadouts`, init ) as Promise<PregameLoadoutsResponse>;
+		return this.requestRemoteGLZ<PregameLoadoutsResponse>( region, shard, `pregame/v1/matches/${ preGameMatchId }/loadouts`, init );
 
 	}
 
@@ -519,7 +519,7 @@ class ValorantAPIManager extends APIManager {
 			method: 'GET',
 		};
 
-		return this.requestRemoteGLZ( region, shard, `core-game/v1/players/${ uuid }`, init ) as Promise<CurrentGamePlayerResponse>;
+		return this.requestRemoteGLZ<CurrentGamePlayerResponse>( region, shard, `core-game/v1/players/${ uuid }`, init );
 
 	}
 
@@ -534,7 +534,7 @@ class ValorantAPIManager extends APIManager {
 			method: 'GET',
 		};
 
-		return this.requestRemoteGLZ( region, shard, `core-game/v1/matches/${ currentGameMatchId }`, init ) as Promise<CurrentGameMatchResponse>;
+		return this.requestRemoteGLZ<CurrentGameMatchResponse>( region, shard, `core-game/v1/matches/${ currentGameMatchId }`, init );
 
 	}
 
@@ -549,7 +549,7 @@ class ValorantAPIManager extends APIManager {
 			method: 'GET',
 		};
 
-		return this.requestRemoteGLZ( region, shard, `core-game/v1/matches/${ currentGameMatchId }/loadouts`, init ) as Promise<CurrentGameLoadoutsResponse>;
+		return this.requestRemoteGLZ<CurrentGameLoadoutsResponse>( region, shard, `core-game/v1/matches/${ currentGameMatchId }/loadouts`, init );
 
 	}
 
@@ -572,7 +572,7 @@ class ValorantAPIManager extends APIManager {
 			method: 'GET',
 		};
 
-		return this.requestRemotePD( shard, `contract-definitions/v3/item-upgrades`, init ) as Promise<ItemUpgradesResponse>;
+		return this.requestRemotePD<ItemUpgradesResponse>( shard, `contract-definitions/v3/item-upgrades`, init );
 
 	}
 
@@ -587,7 +587,7 @@ class ValorantAPIManager extends APIManager {
 			method: 'GET',
 		};
 
-		return this.requestRemotePD( shard, `contracts/v1/contracts/${ uuid }`, init ) as Promise<ActivateContractResponse>;
+		return this.requestRemotePD<ActivateContractResponse>( shard, `contracts/v1/contracts/${ uuid }`, init );
 
 	}
 

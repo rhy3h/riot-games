@@ -4,26 +4,23 @@ class APIManager {
 
 	constructor( ) {}
 
-	protected async fetch( url: string, init?: RequestInit ) {
+	protected async fetchRiot<T>( url: string, init?: RequestInit ): Promise<T> {
 
-		return fetch( url, init )
-			.then( ( response ) => {
+		const response = await fetch( url, init );
 
-				if ( response.status === 200 ) {
+		if ( response.status === 200 ) {
 
-					return response.json();
+			return await response.json() as T;
 
-				} else if ( response.status === 204 ) {
+		}
 
-					return "";
+		if ( response.status === 204 ) {
 
-				} else {
+			return null;
 
-					throw Error( 'Response ' + response.status + ': ' + response.statusText );
+		}
 
-				}
-
-			} );
+		throw new Error( `Response ${response.status}: ${response.statusText}` );
 
 	}
 

@@ -33,7 +33,7 @@ class RiotAPIManager extends APIManager {
 			headers
 		};
 
-		return this.fetch( url, init ) as Promise<PlayerInfoResponse>;
+		return this.fetchRiot<PlayerInfoResponse>( url, init );
 
 	}
 
